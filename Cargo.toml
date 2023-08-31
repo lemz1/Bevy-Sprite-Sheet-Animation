@@ -3,7 +3,7 @@ name = "bevy_ss_anim"
 version = "0.1.0"
 edition = "2021"
 authors = ["lemz"]
-keywords = ["bevy", "sparrow", "sprite-sheet", "ss", "sprite", "2d", "animation", "game", "engine", "asset", "system", "xml"]
+keywords = ["bevy", "sprite-sheet", "animation", "2d", "sprite"]
 description = "Animated-Sprite Using Sparrow-V2 Adobe Animate Sprite Sheets"
 categories = ["game-development"]
 
