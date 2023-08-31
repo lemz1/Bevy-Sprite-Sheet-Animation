@@ -7,7 +7,7 @@ This Crate Currently Can Create An Animated Sprite From A Sprite Sheet Generated
 This Is In Early Development So Stuff Is Subject To Change
 
 ## How To Use This Crate
-This Is Example Uses Sparrow-V2, If Other Data Formats Are Supported You Can Of Course Also Use Them Similarly To This
+This Example Uses Sparrow-V2, If Other Data Formats Are Supported You Can Of Course Also Use Them Similarly To This
 
 ```rust ignore
 // bevy version: 0.11.2
