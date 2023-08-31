@@ -1,9 +1,9 @@
 [package]
 name = "bevy_ss_anim"
-version = "0.0.5"
+version = "0.1.0"
 edition = "2021"
 authors = ["lemz"]
-keywords = ["bevy", "sprite-sheet", "animation", "2d", "sprite"]
+keywords = ["bevy", "sprite-sheet", "animation", "2d", "asset"]
 description = "Animated-Sprite Using Sparrow-V2 Adobe Animate Sprite Sheets"
 categories = ["game-development"]
 readme = "README.md"
@@ -12,7 +12,8 @@ license-file = "LICENSE"
 
 
 [dependencies]
-bevy = {version = "0.11.2", default-features = false, features = ["bevy_asset", "bevy_sprite"]}
+#bevy = {version = "^0.9", default-features = false, features = ["bevy_asset", "bevy_sprite"]}
+bevy = "0.11.2"
 
-serde = "1.0.188"
+serde = {version = "1.0.188", features = ["derive"]}
 serde-xml-rs = "0.6.0"
