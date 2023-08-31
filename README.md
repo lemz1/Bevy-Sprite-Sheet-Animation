@@ -7,6 +7,7 @@ This Crate Currently Can Create An Animated Sprite From A Sprite Sheet Generated
 This Is In Early Development So Stuff Is Subject To Change
 
 ## How To Use This Crate
+This Is Example Uses Sparrow-V2, If Other Data Formats Are Supported You Can Of Course Also Use Them Similarly To This
 
 ```rust ignore
 // bevy version: 0.11.2
@@ -17,7 +18,7 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_systems(Startup, setup)
-        .add_systems(Update, (jump, bevy_ss_anim::update_animations))
+        .add_systems(Update, (jump, bevy_ss_anim::sparrow_v2::update_animations))
         .run();
 }
 
@@ -31,7 +32,7 @@ fn setup(
 
     // in assets/images/ you would have the player.png and player.xml files
     // path to png and xml, texture atlases, asset server
-    let bundle = bevy_ss_anim::AnimatedSpriteBundle::new("images/player", &mut texture_atlases, &asset_server);
+    let bundle = bevy_ss_anim::sparrow_v2::AnimatedSpriteBundle::new("images/player", &mut texture_atlases, &asset_server);
 
     if let Some(mut bundle) = bundle {
         // animation name, animation prefix in xml, fps, looped, offset
@@ -49,7 +50,7 @@ fn setup(
 
 fn jump(
     input: Res<Input<KeyCode>>,
-    mut query: Query<(&mut bevy_ss_anim::AnimatedSprite, &mut TextureAtlasSprite, &mut Transform)>,
+    mut query: Query<(&mut bevy_ss_anim::sparrow_v2::AnimatedSprite, &mut TextureAtlasSprite, &mut Transform)>,
 ) {
     for (mut animated_sprite, mut sprite, mut transform) in query.iter_mut() {
         if animated_sprite.animation_is_finished {

@@ -1,6 +1,6 @@
 [package]
 name = "bevy_ss_anim"
-version = "0.0.4"
+version = "0.0.5"
 edition = "2021"
 authors = ["lemz"]
 keywords = ["bevy", "sprite-sheet", "animation", "2d", "sprite"]
