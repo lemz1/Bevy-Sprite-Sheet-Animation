@@ -33,7 +33,7 @@ pub struct XMLData {
 }
 
 // Struct containing animation data
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone)]
 pub struct AnimationData {
     // Animation properties
     pub name: String,
@@ -49,13 +49,13 @@ pub struct AnimationData {
 #[derive(Debug, Default, Component)]
 pub struct AnimatedSprite {
     // Animation and sprite data
-    pub animations: Vec<AnimationData>,
-    pub frames: HashMap<String, usize>,
-    pub offsets: Vec<Vec2>,
-    pub current_animation_index: Option<usize>,
     pub animation_is_finished: bool,
     pub animation_is_paused: bool,
-    pub xml_data: XMLData,
+    animations: Vec<AnimationData>,
+    frames: HashMap<String, usize>,
+    offsets: Vec<Vec2>,
+    current_animation_index: Option<usize>,
+    xml_data: XMLData,
 }
 
 // Bundle for creating an AnimatedSprite
@@ -344,6 +344,17 @@ impl AnimatedSprite {
         &mut self
     ) {
         self.animation_is_paused = false;
+    }
+
+    pub fn current_animation(
+        &self
+    ) -> AnimationData {
+        if let Some(index) = self.current_animation_index {
+            return self.animations[index].clone();
+        } else {
+            println!("No Animation Playing");
+            return AnimationData::default();
+        }
     }
 }
 
