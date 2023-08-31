@@ -1,0 +1,14 @@
+[package]
+name = "bevy_animation"
+version = "0.1.0"
+edition = "2021"
+keywords = ["bevy", "sparrow", "animation", "game", "engine", "asset", "system", "xml"]
+description = "Animated-Sprite Using Sparrow-V2 Adobe Animate Sprite Sheets"
+categories = ["game-development"]
+
+
+[dependencies]
+bevy = {version = "0.11.2", default-features = false, features = ["bevy_asset", "bevy_sprite"]}
+
+serde = "1.0.188"
+serde-xml-rs = "0.6.0"
