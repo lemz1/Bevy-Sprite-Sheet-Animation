@@ -70,6 +70,20 @@ pub struct AnimatedSpriteBundle {
 }
 
 impl AnimatedSpriteBundle {
+    /// Creates a new `AnimatedSpriteBundle` by loading and initializing sprite data.
+    ///
+    /// This method loads XML content from a file, deserializes it, and prepares the sprite
+    /// sheet bundle and animated sprite data for use.
+    ///
+    /// # Parameters
+    ///
+    /// - `path`: Path to the PNG and XML files.
+    /// - `texture_atlases`: Reference to the `TextureAtlas` asset storage.
+    /// - `asset_server`: Reference to the asset server for loading assets.
+    ///
+    /// # Returns
+    ///
+    /// A new `AnimatedSpriteBundle` if successful, or `None` if an error occurred.
     pub fn new(
         path: &str,
         texture_atlases: &mut Assets<TextureAtlas>,
@@ -136,7 +150,18 @@ impl AnimatedSpriteBundle {
 
 // Implementation of methods for the AnimatedSprite struct
 impl AnimatedSprite {
-    // Method to add an animation using specific frames
+    /// Adds a new animation using specific frames.
+    ///
+    /// This method adds an animation to the `AnimatedSprite` using the provided frames,
+    /// frames-per-second (fps), looped status, and offset.
+    ///
+    /// # Parameters
+    ///
+    /// - `animation_name`: Name of the animation to be added.
+    /// - `frames`: Vector of frame names that compose the animation.
+    /// - `fps`: Frames per second of the animation.
+    /// - `looped`: Indicates whether the animation should loop.
+    /// - `offset`: Offset applied to the animation.
     pub fn add_animation_by_frames(
         &mut self,
         animation_name: &str,
@@ -169,7 +194,18 @@ impl AnimatedSprite {
         );
     }
 
-    // Method to add an animation using frames with a specific prefix
+    /// Adds a new animation using frames with a specific prefix.
+    ///
+    /// This method collects frames with the specified prefix, sorts them, and then
+    /// adds the animation to the `AnimatedSprite`.
+    ///
+    /// # Parameters
+    ///
+    /// - `animation_name`: Name of the animation to be added.
+    /// - `prefix`: Prefix used to identify frames for the animation.
+    /// - `fps`: Frames per second of the animation.
+    /// - `looped`: Indicates whether the animation should loop.
+    /// - `offset`: Offset applied to the animation.
     pub fn add_animation_by_prefix(
         &mut self,
         animation_name: &str,
@@ -191,7 +227,17 @@ impl AnimatedSprite {
         );
     }
 
-    // Method to play a specific animation
+    /// Plays a specific animation on the `AnimatedSprite`.
+    ///
+    /// This method searches for the animation by name and plays it on the provided sprite
+    /// and transform.
+    ///
+    /// # Parameters
+    ///
+    /// - `animation_name`: Name of the animation to be played.
+    /// - `forced`: Forces the animation to play even if it's the current animation.
+    /// - `sprite`: Reference to the sprite to which the animation is applied.
+    /// - `transform`: Reference to the transform of the sprite.
     pub fn play_animation(
         &mut self,
         animation_name: &str,
@@ -266,33 +312,77 @@ impl AnimatedSprite {
         ) * transform.scale;
     }
 
-    // Method to move to the next frame of the current animation
-    pub fn next_frame(
+    /// Pauses the current animation.
+    ///
+    /// This method pauses the currently playing animation.
+    pub fn pause(
+        &mut self
+    ) {
+        self.animation_is_paused = true;
+    }
+    
+    /// Resumes the current animation.
+    ///
+    /// This method resumes a paused animation.
+    pub fn resume(
+        &mut self
+    ) {
+        self.animation_is_paused = false;
+    }
+    
+    /// Retrieves information about the current animation.
+    ///
+    /// This method returns an instance of `AnimationData` containing information
+    /// about the currently playing animation.
+    ///
+    /// # Returns
+    ///
+    /// An `AnimationData` object representing the current animation.
+    pub fn current_animation(
+        &self
+    ) -> AnimationData {
+        if let Some(index) = self.current_animation_index {
+            return self.animations[index].clone();
+        } else {
+            println!("No Animation Playing");
+            return AnimationData::default();
+        }
+    }
+
+    /// Moves to the next frame of the current animation.
+    ///
+    /// This method advances the animation to the next frame and updates the sprite and transform.
+    ///
+    /// # Parameters
+    ///
+    /// - `sprite`: Reference to the sprite being animated.
+    /// - `transform`: Reference to the transform of the sprite.
+    fn next_frame(
         &mut self,
         sprite: &mut TextureAtlasSprite,
         transform: &mut Transform,
     ) {
         let animation = &mut self.animations[self.current_animation_index.unwrap()];
-
+    
         animation.timer.reset();
-
+    
         if animation.current_index >= animation.indices.len() - 1 {
             if !animation.looped {
                 self.animation_is_finished = true;
                 return;
             }
-
+    
             // Remove offset
             transform.translation -= Vec3::new(
                 self.offsets[sprite.index].x,
                 self.offsets[sprite.index].y,
                 0f32,
             ) * transform.scale;
-
+    
             // Loop to the first frame
             animation.current_index = 0;
             sprite.index = animation.indices[animation.current_index];
-
+    
             // Set offset
             transform.translation += Vec3::new(
                 self.offsets[sprite.index].x,
@@ -306,11 +396,11 @@ impl AnimatedSprite {
                 self.offsets[sprite.index].y,
                 0f32,
             ) * transform.scale;
-
+    
             // Move to the next frame
             animation.current_index += 1;
             sprite.index = animation.indices[animation.current_index];
-
+    
             // Set offset
             transform.translation += Vec3::new(
                 self.offsets[sprite.index].x,
@@ -319,8 +409,18 @@ impl AnimatedSprite {
             ) * transform.scale;
         }
     }
-
-    pub fn update_frame(
+    
+    /// Updates the frame of the current animation.
+    ///
+    /// This method updates the animation frame based on the elapsed time and advances
+    /// to the next frame if necessary.
+    ///
+    /// # Parameters
+    ///
+    /// - `sprite`: Reference to the sprite being animated.
+    /// - `transform`: Reference to the transform of the sprite.
+    /// - `time`: Reference to the time information for timing the animation.
+    fn update_frame(
         &mut self,
         mut sprite: &mut TextureAtlasSprite, 
         mut transform: &mut Transform,
@@ -330,39 +430,14 @@ impl AnimatedSprite {
         if self.animation_is_finished || self.animation_is_paused {
             return;
         }
-
+    
         if let Some(index) = self.current_animation_index {
             let animation = &mut self.animations[index];
             animation.timer.tick(time.delta());
-
+    
             if animation.timer.just_finished() {
                 self.next_frame(&mut sprite, &mut transform);
             }
-        }
-    }
-
-    // Method to pause the current animation
-    pub fn pause(
-        &mut self
-    ) {
-        self.animation_is_paused = true;
-    }
-
-    // Method to resume the current animation
-    pub fn resume(
-        &mut self
-    ) {
-        self.animation_is_paused = false;
-    }
-
-    pub fn current_animation(
-        &self
-    ) -> AnimationData {
-        if let Some(index) = self.current_animation_index {
-            return self.animations[index].clone();
-        } else {
-            println!("No Animation Playing");
-            return AnimationData::default();
         }
     }
 }
