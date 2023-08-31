@@ -1,4 +1,4 @@
-[![Bevy tracking](https://img.shields.io/badge/Bevy%20tracking-released%20version-lightblue)](https://github.com/bevyengine/bevy/blob/main/docs/plugins_guidelines.md#main-branch-tracking)
+[![Bevy tracking](https://img.shields.io/badge/Bevy%20tracking-released%20version-lightblue)](https://github.com/bevyengine/bevy/blob/main/docs/plugins_guidelines.md#main-branch-tracking) [![crates.io](https://img.shields.io/crates/v/bevy_ss_anim)](https://crates.io/crates/bevy_ss_anim) [![docs.rs](https://docs.rs/bevy_ss_anim/badge.svg)](https://docs.rs/bevy_ss_anim)
 
 # Bevy Sprite Sheet Animation
 This Crate Currently Can Parse Sprite Sheets Generated In Adobe Animate Using The Sparrow-V2 Option
@@ -9,7 +9,7 @@ This Is In Early Development So Stuff Is Subject To Change
 
 ## How To Use This Crate
 
-´´´rust ignore
+```rust ignore
 use bevy::prelude::*;
 use bevy_ss_anim;
 
@@ -62,4 +62,4 @@ fn jump(
     }
 }
 
-´´´
+```
