@@ -141,6 +141,11 @@ impl AnimatedSprite {
         looped: bool,
         offset: Vec2,
     ) {
+        if frames.len() == 0 {
+            println!("\x1b[38;5;196mAnimation ({animation_name}) wasn't created because it had 0 frames\x1b[0;0;0m");
+            return;
+        }
+
         // Check if animation already exists with this name and remove it
         if let Some(index) = self.animations.iter().position(|animation| animation.name == animation_name) {
             self.animations.remove(index);

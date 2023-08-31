@@ -9,6 +9,7 @@ This Is In Early Development So Stuff Is Subject To Change
 ## How To Use This Crate
 
 ```rust ignore
+// bevy version: 0.11.2
 use bevy::prelude::*;
 use bevy_ss_anim;
 
