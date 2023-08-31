@@ -6,6 +6,9 @@ authors = ["lemz"]
 keywords = ["bevy", "sprite-sheet", "animation", "2d", "sprite"]
 description = "Animated-Sprite Using Sparrow-V2 Adobe Animate Sprite Sheets"
 categories = ["game-development"]
+readme = "README.md"
+repository = "https://github.com/lemz1/Bevy-Sprite-Sheet-Animation"
+license-file = "LICENSE"
 
 
 [dependencies]
