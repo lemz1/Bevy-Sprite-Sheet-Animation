@@ -1,10 +1,10 @@
 [package]
 name = "bevy_ss_anim"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 authors = ["lemz"]
 keywords = ["bevy", "sprite-sheet", "animation", "2d", "asset"]
-description = "Animated-Sprite Using Sparrow-V2 Adobe Animate Sprite Sheets"
+description = "Animated-Sprite From Sprite-Sheets Generated In Adobe Animate"
 categories = ["game-development"]
 readme = "README.md"
 repository = "https://github.com/lemz1/Bevy-Sprite-Sheet-Animation"
