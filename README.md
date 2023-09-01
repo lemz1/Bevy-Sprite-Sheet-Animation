@@ -3,8 +3,12 @@
 # Bevy Sprite Sheet Animation
 This Crate Currently Can Create An Animated Sprite From A Sprite Sheet Generated In Adobe Animate Using The Data Formats:
 
-- Sparrow-V1
-- Sparrow-V2
+- Sparrow V1
+- Sparrow V2
+- Starling
+- Json
+- Json Array
+- Edge Animate
 
 ## Disclaimer!
 This Is In Early Development So Stuff Is Subject To Change
@@ -21,7 +25,7 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_systems(Startup, setup)
-        .add_systems(Update, (jump, bevy_ss_anim::sparrow::update_animations))
+        .add_systems(Update, (jump, bevy_ss_anim::update_animations))
         .run();
 }
 
@@ -35,7 +39,7 @@ fn setup(
 
     // in assets/images/ you would have the player.png and player.xml files
     // path to png and xml, texture atlases, asset server
-    let bundle = bevy_ss_anim::sparrow::AnimatedSpriteBundle::new("images/player", &mut texture_atlases, &asset_server);
+    let bundle = bevy_ss_anim::AnimatedSpriteBundle::from_sparrow("images/player", &mut texture_atlases, &asset_server);
 
     if let Some(mut bundle) = bundle {
         // animation name, animation prefix in xml, fps, looped, offset
@@ -53,7 +57,7 @@ fn setup(
 
 fn jump(
     input: Res<Input<KeyCode>>,
-    mut query: Query<(&mut bevy_ss_anim::sparrow::AnimatedSprite, &mut TextureAtlasSprite, &mut Transform)>,
+    mut query: Query<(&mut bevy_ss_anim::AnimatedSprite, &mut TextureAtlasSprite, &mut Transform)>,
 ) {
     for (mut animated_sprite, mut sprite, mut transform) in query.iter_mut() {
         if animated_sprite.animation_is_finished {

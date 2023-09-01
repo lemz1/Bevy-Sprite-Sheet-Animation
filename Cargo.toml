@@ -1,6 +1,6 @@
 [package]
 name = "bevy_ss_anim"
-version = "0.1.2"
+version = "0.2.0"
 edition = "2021"
 authors = ["lemz"]
 keywords = ["bevy", "sprite-sheet", "animation", "2d", "asset"]
@@ -16,3 +16,4 @@ bevy = {version = "^0.9", default-features = false, features = ["bevy_asset", "b
 
 serde = {version = "1.0.188", features = ["derive"]}
 serde-xml-rs = "0.6.0"
+serde_json = "1.0.105"

@@ -2,56 +2,57 @@
 use bevy::prelude::*;
 
 use serde::Deserialize;
-use serde_xml_rs;
+use serde_json;
 
 use crate::AnimatedSpriteBundle;
 use crate::AnimatedSprite;
 use crate::FrameOffset;
 
-// Struct representing a subtexture within the XML data
-#[derive(Debug, Deserialize, PartialEq)]
-struct SubTexture {
-    // Attributes of a subtexture
-    name: String,
-
+#[derive(Debug, Default, Deserialize)]
+struct Frame {
     x: u32,
     y: u32,
-    #[serde(alias = "w")]
-    width: u32,
-    #[serde(alias = "h")]
-    height: u32,
-
-    #[serde(default, rename = "frameX")]
-    frame_x: i32,
-    #[serde(default, rename = "frameY")]
-    frame_y: i32,
-    // we dont need these
-    // #[serde(default, rename = "frameWidth")]
-    // frame_width: u32,
-    // #[serde(default, rename = "frameHeight")]
-    // frame_height: u32,
+    w: u32,
+    h: u32,
 }
 
-// Struct representing the entire XML data
-#[derive(Debug, Default, Deserialize, PartialEq)]
+#[derive(Debug, Default, Deserialize)]
+struct SpriteSourceSize {
+    x: u32,
+    y: u32,
+    // we dont need these
+    // w: u32,
+    // h: u32,
+}
+
+#[derive(Debug, Default, Deserialize)]
+struct FrameData {
+    filename: String,
+    frame: Frame,
+    rotated: bool,
+    #[serde(rename = "spriteSourceSize")]
+    sprite_source_size: SpriteSourceSize,
+}
+
+#[derive(Debug, Default, Deserialize)]
 struct Frames {
-    #[serde(rename = "SubTexture")]
-    subtextures: Vec<SubTexture>,
+    frames: Vec<FrameData>,
 }
 
 pub fn create_animated_sprite_bundle(
     path: &str,
+    is_edge_animate: bool,
     texture_atlases: &mut Assets<TextureAtlas>,
     asset_server: &AssetServer,
 ) -> Option<AnimatedSpriteBundle> {
-    // Load XML content from file
-    let content = std::fs::read_to_string(format!("assets/{path}.xml")).ok()?;
+    // Load Json content from file
+    let content = std::fs::read_to_string(format!("assets/{path}{}", if is_edge_animate {".eas"} else {".json"})).ok()?;
 
     // Remove the BOM if present (UTF-8 BOM is 0xEF, 0xBB, 0xBF)
     let content = content.trim_start_matches('\u{FEFF}').to_string();
 
-    // Deserialize XML data
-    let xml_data: Frames = serde_xml_rs::from_str(&content).ok()?;
+    // Deserialize Json data
+    let json_data: Frames = serde_json::from_str(&content).ok()?;
 
     // Load texture atlas and prepare sprite sheet bundle
     let texture_atlas_handle = texture_atlases.add(
@@ -66,21 +67,21 @@ pub fn create_animated_sprite_bundle(
     // Prepare animated sprite data
     let mut animated_sprite = AnimatedSprite::default();
 
-    // Add subtextures to the texture atlas and animated sprite data
-    for subtexture in xml_data.subtextures.iter() {
+    // Add frames to the texture atlas and animated sprite data
+    for frame in json_data.frames.iter() {
         // Add texture to atlas
         let index = texture_atlas.add_texture(
             Rect::new(
-                subtexture.x as f32,
-                subtexture.y as f32,
-                (subtexture.x + subtexture.width) as f32,
-                (subtexture.y + subtexture.height) as f32,
+                frame.frame.x as f32,
+                frame.frame.y as f32,
+                (frame.frame.x + frame.frame.w) as f32,
+                (frame.frame.y + frame.frame.h) as f32,
             )
         );
-        
+
         // Insert texture index into frames and set frame offset
         animated_sprite.frames.insert(
-            subtexture.name.clone(),
+            frame.filename.clone(),
             index
         );
 
@@ -88,10 +89,10 @@ pub fn create_animated_sprite_bundle(
             index,
             FrameOffset {
                 position_offset: Vec2::new(
-                    subtexture.frame_x as f32 * 0.5,
-                    subtexture.frame_y as f32 * 0.5,
+                    frame.sprite_source_size.x as f32 * -0.5, // negative because for some reason
+                    frame.sprite_source_size.y as f32 * -0.5, // the json has the inverted sign
                 ),
-                rotation_offset: 0f32
+                rotation_offset: if frame.rotated {std::f32::consts::PI * 0.5} else {0f32},
             }
         );
     }
