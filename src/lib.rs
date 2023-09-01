@@ -26,13 +26,19 @@ mod json_array;
 /// - `timer`: A timer used to control the animation's frame switching.
 #[derive(Debug, Default, Clone)]
 pub struct AnimationData {
-    // Animation properties
+    /// The name of the animation.
     pub name: String,
+    /// The frames per second at which the animation should play.
     pub fps: u8,
+    /// Indicates whether the animation should loop when it reaches its end.
     pub looped: bool,
+    /// A 2D vector representing the offset to apply to the animation.
     pub offset: Vec2,
+    /// A vector of frame indices that make up the animation.
     pub indices: Vec<usize>,
+    /// The index of the current frame within the animation.
     pub current_index: usize,
+    /// A timer used to control the animation's frame switching.
     pub timer: Timer,
 }
 
@@ -42,12 +48,23 @@ struct FrameOffset {
     rotation_offset: f32,
 }
 
-/// Component representing an animated sprite
+/// Struct representing an animated sprite.
+///
+/// The `AnimatedSprite` struct contains information about animations and provides methods
+/// to manage and play animations on a sprite. It allows you to add animations, play specific
+/// animations, pause, resume, and retrieve information about the current animation.
+/// 
+/// # Fields
+///
+/// - `animation_is_finished`: A boolean indicating whether the current animation has finished playing.
+/// - `animation_is_paused`: A boolean indicating whether the current animation is paused.
 #[derive(Debug, Default, Component)]
 pub struct AnimatedSprite {
-    // Animation and sprite data
+    /// Indicates whether the animation has finished playing.
     pub animation_is_finished: bool,
+    /// Indicates whether the animation is currently paused.
     pub animation_is_paused: bool,
+    
     animations: Vec<AnimationData>,
     frames: HashMap<String, usize>,
     frame_offsets: Vec<FrameOffset>,
