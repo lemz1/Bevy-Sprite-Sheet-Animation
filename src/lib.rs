@@ -7,7 +7,23 @@ mod sparrow;
 mod json;
 mod json_array;
 
-/// Struct containing animation data
+/// Struct containing animation data.
+///
+/// This struct represents the properties and settings of an animation that can be played
+/// on an `AnimatedSprite`. It includes information such as the animation's name, frames
+/// per second (fps), loop status, offset, current frame index, and a timer for controlling
+/// animation timing.
+///
+/// # Fields
+///
+/// - `name`: The name of the animation.
+/// - `fps`: The frames per second at which the animation should play.
+/// - `looped`: A boolean indicating whether the animation should loop when it reaches
+///   its end.
+/// - `offset`: A 2D vector representing the offset to apply to the animation.
+/// - `indices`: A vector of frame indices that make up the animation.
+/// - `current_index`: The index of the current frame within the animation.
+/// - `timer`: A timer used to control the animation's frame switching.
 #[derive(Debug, Default, Clone)]
 pub struct AnimationData {
     // Animation properties
